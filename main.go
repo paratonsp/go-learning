@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -17,6 +18,10 @@ func main() {
 
 	models.ConnectDatabase()
 	r := mux.NewRouter()
+
+	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "<h1>learning-go</h1>")
+	})
 
 	r.HandleFunc("/login", authcontroller.Login).Methods("POST")
 	r.HandleFunc("/register", authcontroller.Register).Methods("POST")
