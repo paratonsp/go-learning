@@ -2,18 +2,14 @@ package main
 
 import (
 	"fmt"
-	"learning-go/controllers/authcontroller"
-	"learning-go/controllers/productcontroller"
-	"learning-go/middlewares"
-	"learning-go/models"
 	"log"
 	"net/http"
 
-	// "learning-go/middlewares"
+	"learning-go/middlewares"
 
-	// "learning-go/controllers/authcontroller"
-	// "learning-go/controllers/productcontroller"
-	// "learning-go/models"
+	"learning-go/controllers/authcontroller"
+	"learning-go/controllers/productcontroller"
+	"learning-go/models"
 
 	"github.com/gorilla/mux"
 )
