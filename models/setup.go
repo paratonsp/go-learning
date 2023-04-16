@@ -10,7 +10,7 @@ import (
 var DB *gorm.DB
 
 func ConnectDatabase() {
-	db, err := gorm.Open(mysql.Open("root:@tcp(localhost:3306)/learning-go"))
+	db, err := gorm.Open(mysql.Open("root:Katon123@tcp(localhost:3306)/learning_go"))
 	if err != nil {
 		fmt.Println("Gagal koneksi database")
 	}
