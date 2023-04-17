@@ -6,11 +6,9 @@ import (
 
 	"gorm.io/gorm"
 
-	"learning-go/helper"
-
-	"learning-go/models"
-
 	"github.com/gorilla/mux"
+	"github.com/paratonsp/learning-go/helper"
+	"github.com/paratonsp/learning-go/models"
 )
 
 func Get(w http.ResponseWriter, r *http.Request) {

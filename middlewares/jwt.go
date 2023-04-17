@@ -3,10 +3,9 @@ package middlewares
 import (
 	"net/http"
 
-	"learning-go/config"
-	"learning-go/helper"
-
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/paratonsp/learning-go/config"
+	"github.com/paratonsp/learning-go/helper"
 )
 
 func JWTMiddleware(next http.Handler) http.Handler {

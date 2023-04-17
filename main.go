@@ -5,13 +5,11 @@ import (
 	"log"
 	"net/http"
 
-	"learning-go/middlewares"
-
-	"learning-go/controllers/authcontroller"
-	"learning-go/controllers/productcontroller"
-	"learning-go/models"
-
 	"github.com/gorilla/mux"
+	"github.com/paratonsp/learning-go/controllers/authcontroller"
+	"github.com/paratonsp/learning-go/controllers/productcontroller"
+	"github.com/paratonsp/learning-go/middlewares"
+	"github.com/paratonsp/learning-go/models"
 )
 
 func main() {
