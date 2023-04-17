@@ -1,6 +1,6 @@
-replace github.com/paratonsp/learning-go => ./learning-go
-
 module github.com/paratonsp/learning-go
+
+replace github.com/paratonsp/learning-go => ./learning-go
 
 go 1.18
 
