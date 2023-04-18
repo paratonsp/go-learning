@@ -77,7 +77,20 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		HttpOnly: true,
 	})
 
-	response := map[string]string{"message": "login berhasil"}
+	if err := models.DB.First(&user).Error; err != nil {
+		switch err {
+		case gorm.ErrRecordNotFound:
+			response := map[string]string{"message": "Data tidak ditemukan"}
+			helper.ResponseJSON(w, http.StatusNotFound, response)
+			return
+		default:
+			response := map[string]string{"message": err.Error()}
+			helper.ResponseJSON(w, http.StatusInternalServerError, response)
+			return
+		}
+	}
+
+	response := map[string]string{"message": "Login Berhasil", "name": user.NamaLengkap}
 	helper.ResponseJSON(w, http.StatusOK, response)
 }
 
@@ -119,5 +132,10 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 	})
 
 	response := map[string]string{"message": "logout berhasil"}
+	helper.ResponseJSON(w, http.StatusOK, response)
+}
+
+func Check(w http.ResponseWriter, r *http.Request) {
+	response := map[string]string{"message": "Authorized"}
 	helper.ResponseJSON(w, http.StatusOK, response)
 }

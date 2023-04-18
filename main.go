@@ -26,6 +26,7 @@ func main() {
 	r.HandleFunc("/logout", controllers.Logout).Methods("GET")
 
 	api := r.PathPrefix("/api").Subrouter()
+	api.HandleFunc("/check", controllers.Check).Methods("GET")
 	api.HandleFunc("/products", controllers.GetProduct).Methods("GET")
 	api.HandleFunc("/products/{id}", controllers.GetProductById).Methods("GET")
 	api.HandleFunc("/products", controllers.CreateProduct).Methods("POST")
