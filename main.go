@@ -18,7 +18,7 @@ func main() {
 	r := mux.NewRouter()
 
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "learning-go")
+		fmt.Fprintf(w, "learning-go by paratonsp")
 	})
 
 	r.HandleFunc("/login", controllers.Login).Methods("POST")
