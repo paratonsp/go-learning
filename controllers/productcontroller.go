@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
 	"fmt"
 	"learning-go/helper"
 	"learning-go/models"
@@ -59,7 +58,7 @@ func CreateProduct(w http.ResponseWriter, r *http.Request) {
 	// 	return
 	// }
 
-	// response := map[string]string{"message": "success"}
+	// response := map[string]string{"message": "Success"}
 	// helper.ResponseJSON(w, http.StatusOK, response)
 
 	var productInput models.Product
@@ -92,21 +91,55 @@ func CreateProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response := map[string]string{"message": "success"}
+	response := map[string]string{"message": "Success"}
 	helper.ResponseJSON(w, http.StatusOK, response)
 }
 
 func UpdateProduct(w http.ResponseWriter, r *http.Request) {
+	// var product models.Product
+	// id := mux.Vars(r)["id"]
+
+	// decoder := json.NewDecoder(r.Body)
+	// if err := decoder.Decode(&product); err != nil {
+	// 	response := map[string]string{"message": err.Error()}
+	// 	helper.ResponseJSON(w, http.StatusBadRequest, response)
+	// 	return
+	// }
+	// defer r.Body.Close()
+
+	// if models.DB.Model(&product).Where("id = ?", id).Updates(&product).RowsAffected == 0 {
+	// 	response := map[string]string{"message": "tidak dapat mengupdate product"}
+	// 	helper.ResponseJSON(w, http.StatusBadRequest, response)
+	// 	return
+	// }
+
+	// response := map[string]string{"message": "Data berhasil diperbarui"}
+	// helper.ResponseJSON(w, http.StatusOK, response)
+
 	var product models.Product
 	id := mux.Vars(r)["id"]
 
-	decoder := json.NewDecoder(r.Body)
-	if err := decoder.Decode(&product); err != nil {
-		response := map[string]string{"message": err.Error()}
-		helper.ResponseJSON(w, http.StatusBadRequest, response)
-		return
+	// imageToLocal, err := helper.FileUploadLocal(r, "products")
+	// if err != nil {
+	// 	fmt.Print(err)
+	// }
+
+	imageToS3, err := helper.FileUploadS3(models.S3S, r, "products")
+	if err != nil {
+		log.Fatal(err)
 	}
-	defer r.Body.Close()
+
+	s, err := strconv.ParseInt(r.Form.Get("stok"), 10, 64)
+	if err != nil {
+		fmt.Print(err)
+
+	}
+
+	product.NamaProduk = r.Form.Get("nama_produk")
+	product.Deskripsi = r.Form.Get("deskripsi")
+	// product.Gambar = imageToLocal
+	product.Gambar = imageToS3
+	product.Stok = s
 
 	if models.DB.Model(&product).Where("id = ?", id).Updates(&product).RowsAffected == 0 {
 		response := map[string]string{"message": "tidak dapat mengupdate product"}
@@ -114,7 +147,7 @@ func UpdateProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response := map[string]string{"message": "Data berhasil diperbarui"}
+	response := map[string]string{"message": "Success"}
 	helper.ResponseJSON(w, http.StatusOK, response)
 
 }

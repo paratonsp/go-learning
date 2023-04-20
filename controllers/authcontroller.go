@@ -117,7 +117,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response := map[string]string{"message": "success"}
+	response := map[string]string{"message": "Success"}
 	helper.ResponseJSON(w, http.StatusOK, response)
 }
 
