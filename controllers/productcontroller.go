@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"learning-go/helper"
 	"learning-go/models"
-	"log"
 	"net/http"
 	"strconv"
 
@@ -43,34 +42,18 @@ func GetProductById(w http.ResponseWriter, r *http.Request) {
 
 func CreateProduct(w http.ResponseWriter, r *http.Request) {
 
-	// var productInput models.Product
-	// decoder := json.NewDecoder(r.Body)
-	// if err := decoder.Decode(&productInput); err != nil {
-	// 	response := map[string]string{"message": err.Error()}
-	// 	helper.ResponseJSON(w, http.StatusBadRequest, response)
-	// 	return
-	// }
-	// defer r.Body.Close()
-
-	// if err := models.DB.Create(&productInput).Error; err != nil {
-	// 	response := map[string]string{"message": err.Error()}
-	// 	helper.ResponseJSON(w, http.StatusInternalServerError, response)
-	// 	return
-	// }
-
-	// response := map[string]string{"message": "Success"}
-	// helper.ResponseJSON(w, http.StatusOK, response)
-
 	var productInput models.Product
 
-	// imageToLocal, err := helper.FileUploadLocal(r, "products")
-	// if err != nil {
-	// 	fmt.Print(err)
-	// }
+	r.ParseMultipartForm(32 << 20)
+	_, _, err := r.FormFile("assets")
+	if err == nil {
 
-	imageToS3, err := helper.FileUploadS3(models.S3S, r, "products")
-	if err != nil {
-		log.Fatal(err)
+		imageToS3, err := helper.FileUploadS3(models.S3S, r, "products")
+		if err != nil {
+			fmt.Print(err)
+		}
+
+		productInput.Gambar = imageToS3
 	}
 
 	s, err := strconv.ParseInt(r.Form.Get("stok"), 10, 64)
@@ -81,8 +64,6 @@ func CreateProduct(w http.ResponseWriter, r *http.Request) {
 
 	productInput.NamaProduk = r.Form.Get("nama_produk")
 	productInput.Deskripsi = r.Form.Get("deskripsi")
-	// productInput.Gambar = imageToLocal
-	productInput.Gambar = imageToS3
 	productInput.Stok = s
 
 	if err := models.DB.Create(&productInput).Error; err != nil {
@@ -96,52 +77,33 @@ func CreateProduct(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateProduct(w http.ResponseWriter, r *http.Request) {
-	// var product models.Product
-	// id := mux.Vars(r)["id"]
-
-	// decoder := json.NewDecoder(r.Body)
-	// if err := decoder.Decode(&product); err != nil {
-	// 	response := map[string]string{"message": err.Error()}
-	// 	helper.ResponseJSON(w, http.StatusBadRequest, response)
-	// 	return
-	// }
-	// defer r.Body.Close()
-
-	// if models.DB.Model(&product).Where("id = ?", id).Updates(&product).RowsAffected == 0 {
-	// 	response := map[string]string{"message": "tidak dapat mengupdate product"}
-	// 	helper.ResponseJSON(w, http.StatusBadRequest, response)
-	// 	return
-	// }
-
-	// response := map[string]string{"message": "Data berhasil diperbarui"}
-	// helper.ResponseJSON(w, http.StatusOK, response)
 
 	var product models.Product
 	id := mux.Vars(r)["id"]
 
-	// imageToLocal, err := helper.FileUploadLocal(r, "products")
-	// if err != nil {
-	// 	fmt.Print(err)
-	// }
+	r.ParseMultipartForm(32 << 20)
+	_, _, err := r.FormFile("assets")
+	if err == nil {
 
-	imageToS3, err := helper.FileUploadS3(models.S3S, r, "products")
-	if err != nil {
-		log.Fatal(err)
+		imageToS3, err := helper.FileUploadS3(models.S3S, r, "products")
+		if err != nil {
+			fmt.Print(err)
+		}
+
+		product.Gambar = imageToS3
 	}
 
 	s, err := strconv.ParseInt(r.Form.Get("stok"), 10, 64)
 	if err != nil {
 		fmt.Print(err)
-
 	}
 
 	product.NamaProduk = r.Form.Get("nama_produk")
 	product.Deskripsi = r.Form.Get("deskripsi")
-	// product.Gambar = imageToLocal
-	product.Gambar = imageToS3
 	product.Stok = s
 
-	if models.DB.Model(&product).Where("id = ?", id).Updates(&product).RowsAffected == 0 {
+	if err := models.DB.Model(&product).Where("id = ?", id).Updates(&product).Error; err != nil {
+		fmt.Print(err)
 		response := map[string]string{"message": "tidak dapat mengupdate product"}
 		helper.ResponseJSON(w, http.StatusBadRequest, response)
 		return

@@ -1,6 +1,7 @@
 package helper
 
 import (
+	"fmt"
 	"io"
 	"learning-go/models"
 	"net/http"
@@ -21,7 +22,6 @@ func FileUploadLocal(r *http.Request, s string) (string, error) {
 	}
 	defer file.Close()
 
-	//Create / Open Local Folder
 	path := filepath.Join(".", "assets/"+s)
 	_ = os.MkdirAll(path, os.ModePerm)
 	fullPath := path + "/" + handler.Filename
@@ -41,7 +41,7 @@ func FileUploadS3(session *session.Session, r *http.Request, s string) (string, 
 	r.ParseMultipartForm(32 << 20)
 	file, handler, err := r.FormFile("assets")
 	if err != nil {
-		return "", err
+		fmt.Print(err)
 	}
 	defer file.Close()
 
