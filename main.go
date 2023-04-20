@@ -35,5 +35,5 @@ func main() {
 	api.HandleFunc("/products/{id}", controllers.DeleteProduct).Methods("DELETE")
 	api.Use(middlewares.JWTMiddleware)
 
-	log.Fatal(http.ListenAndServe(":8080", r))
+	log.Fatal(http.ListenAndServe(":80", r))
 }
