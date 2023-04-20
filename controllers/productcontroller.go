@@ -2,9 +2,12 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"learning-go/helper"
 	"learning-go/models"
+	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 	"gorm.io/gorm"
@@ -41,14 +44,47 @@ func GetProductById(w http.ResponseWriter, r *http.Request) {
 
 func CreateProduct(w http.ResponseWriter, r *http.Request) {
 
+	// var productInput models.Product
+	// decoder := json.NewDecoder(r.Body)
+	// if err := decoder.Decode(&productInput); err != nil {
+	// 	response := map[string]string{"message": err.Error()}
+	// 	helper.ResponseJSON(w, http.StatusBadRequest, response)
+	// 	return
+	// }
+	// defer r.Body.Close()
+
+	// if err := models.DB.Create(&productInput).Error; err != nil {
+	// 	response := map[string]string{"message": err.Error()}
+	// 	helper.ResponseJSON(w, http.StatusInternalServerError, response)
+	// 	return
+	// }
+
+	// response := map[string]string{"message": "success"}
+	// helper.ResponseJSON(w, http.StatusOK, response)
+
 	var productInput models.Product
-	decoder := json.NewDecoder(r.Body)
-	if err := decoder.Decode(&productInput); err != nil {
-		response := map[string]string{"message": err.Error()}
-		helper.ResponseJSON(w, http.StatusBadRequest, response)
-		return
+
+	// imageToLocal, err := helper.FileUploadLocal(r, "products")
+	// if err != nil {
+	// 	fmt.Print(err)
+	// }
+
+	imageToS3, err := helper.FileUploadS3(models.S3S, r, "products")
+	if err != nil {
+		log.Fatal(err)
 	}
-	defer r.Body.Close()
+
+	s, err := strconv.ParseInt(r.Form.Get("stok"), 10, 64)
+	if err != nil {
+		fmt.Print(err)
+
+	}
+
+	productInput.NamaProduk = r.Form.Get("nama_produk")
+	productInput.Deskripsi = r.Form.Get("deskripsi")
+	// productInput.Gambar = imageToLocal
+	productInput.Gambar = imageToS3
+	productInput.Stok = s
 
 	if err := models.DB.Create(&productInput).Error; err != nil {
 		response := map[string]string{"message": err.Error()}

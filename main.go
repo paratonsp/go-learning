@@ -15,10 +15,11 @@ import (
 func main() {
 
 	models.ConnectDatabase()
+	models.ConnectStorage()
 	r := mux.NewRouter()
 
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "learning-go by paratonsp")
+		fmt.Fprintf(w, "learning-go rest api")
 	})
 
 	r.HandleFunc("/login", controllers.Login).Methods("POST")
@@ -26,7 +27,7 @@ func main() {
 	r.HandleFunc("/logout", controllers.Logout).Methods("GET")
 
 	api := r.PathPrefix("/api").Subrouter()
-	api.HandleFunc("/check", controllers.Check).Methods("GET")
+	api.HandleFunc("/ping", controllers.Ping).Methods("GET")
 	api.HandleFunc("/products", controllers.GetProduct).Methods("GET")
 	api.HandleFunc("/products/{id}", controllers.GetProductById).Methods("GET")
 	api.HandleFunc("/products", controllers.CreateProduct).Methods("POST")

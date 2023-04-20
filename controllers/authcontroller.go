@@ -135,7 +135,7 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 	helper.ResponseJSON(w, http.StatusOK, response)
 }
 
-func Check(w http.ResponseWriter, r *http.Request) {
+func Ping(w http.ResponseWriter, r *http.Request) {
 	response := map[string]string{"message": "Authorized"}
 	helper.ResponseJSON(w, http.StatusOK, response)
 }
