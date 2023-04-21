@@ -20,13 +20,17 @@ const (
 	AWS_S3_ENDPOINT   = "https://is3.cloudhost.id/paratonsp-storage"
 	AWS_S3_ACCESS_KEY = "00MX39J2CQKZI5O9TCJ9"
 	AWS_S3_SECRET_KEY = "WHSrk1R0EQVRCFIYbvYxgZliQZUK4z4oHVQcUe0d"
+	DB_USERNAME       = "paratonsp"
+	DB_PASSWORD       = "Katon#11"
+	DB_HOST           = "103.54.170.102:3306"
+	DB_NAME           = "learning_go"
 )
 
 func ConnectDatabase() {
-	db, err := gorm.Open(mysql.Open("paratonsp:Katon#11@tcp(103.54.170.102:3306)/learning_go"))
+	url := DB_USERNAME + ":" + DB_PASSWORD + "@tcp(" + DB_HOST + ")/" + DB_NAME
+	db, err := gorm.Open(mysql.Open(url))
 	if err != nil {
-		fmt.Println("Gagal koneksi database")
-		fmt.Println(err.Error())
+		fmt.Println("DB Connection Error: " + err.Error())
 		return
 	}
 
@@ -45,7 +49,7 @@ func ConnectStorage() {
 		Endpoint:         aws.String(AWS_S3_ENDPOINT),
 	})
 	if err != nil {
-		fmt.Printf("NewSession error: %s\n", err)
+		fmt.Printf("S3 Session Error: " + err.Error())
 		return
 	}
 	S3S = sess

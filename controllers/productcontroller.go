@@ -26,7 +26,7 @@ func GetProductById(w http.ResponseWriter, r *http.Request) {
 	if err := models.DB.First(&product, id).Error; err != nil {
 		switch err {
 		case gorm.ErrRecordNotFound:
-			response := map[string]string{"message": "Data tidak ditemukan"}
+			response := map[string]string{"message": "Data Not Found"}
 			helper.ResponseJSON(w, http.StatusNotFound, response)
 			return
 		default:
@@ -67,12 +67,12 @@ func CreateProduct(w http.ResponseWriter, r *http.Request) {
 	productInput.Stok = s
 
 	if err := models.DB.Create(&productInput).Error; err != nil {
-		response := map[string]string{"message": err.Error()}
+		response := map[string]string{"message": "Cannot Create Data"}
 		helper.ResponseJSON(w, http.StatusInternalServerError, response)
 		return
 	}
 
-	response := map[string]string{"message": "Success"}
+	response := map[string]string{"message": "Success Create Data"}
 	helper.ResponseJSON(w, http.StatusOK, response)
 }
 
@@ -104,12 +104,12 @@ func UpdateProduct(w http.ResponseWriter, r *http.Request) {
 
 	if err := models.DB.Model(&product).Where("id = ?", id).Updates(&product).Error; err != nil {
 		fmt.Print(err)
-		response := map[string]string{"message": "tidak dapat mengupdate product"}
+		response := map[string]string{"message": "Cannot Update Data"}
 		helper.ResponseJSON(w, http.StatusBadRequest, response)
 		return
 	}
 
-	response := map[string]string{"message": "Success"}
+	response := map[string]string{"message": "Success Update Data"}
 	helper.ResponseJSON(w, http.StatusOK, response)
 
 }
@@ -120,11 +120,11 @@ func DeleteProduct(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 
 	if models.DB.Delete(&product, id).RowsAffected == 0 {
-		response := map[string]string{"message": "Tidak dapat menghapus product"}
+		response := map[string]string{"message": "Cannot Delete Data"}
 		helper.ResponseJSON(w, http.StatusBadRequest, response)
 		return
 	}
-	response := map[string]string{"message": "Data berhasil dihapus"}
+	response := map[string]string{"message": "Success Delete Data"}
 	helper.ResponseJSON(w, http.StatusOK, response)
 
 }
