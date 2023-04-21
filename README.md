@@ -194,3 +194,4 @@ You will store the Docker Compose configuration for the Go web app in a file nam
 ### Step 6 - Running the Docker Compose File
 ---------------------
 You can now navigate to https://`your_domain`/ to access your homepage.
+Note: Step Installing MySql with IP access
