@@ -1,4 +1,4 @@
-# learning-go
+# Learning Go
 
 ## Go Rest API
 
